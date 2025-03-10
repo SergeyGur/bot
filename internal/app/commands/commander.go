@@ -18,3 +18,18 @@ func NewCommander(bot *tgbotapi.BotAPI,
 		productService: productService,
 	}
 }
+
+func (c *Commander) HandleUpdate(update tgbotapi.Update, productService *product.Service) {
+	if update.Message == nil {
+		return
+	}
+
+	switch update.Message.Command() {
+	case "help":
+		c.Help(update.Message)
+	case "list":
+		c.List(update.Message, productService)
+	default:
+		c.Default(update.Message)
+	}
+}
